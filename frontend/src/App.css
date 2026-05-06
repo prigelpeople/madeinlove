@@ -24,7 +24,7 @@
     --tracking-wide: 0.25em;
     --tracking-wider: 0.32em;
 
-    --nav-w: 48px;
+    --nav-w: 0px;
 }
 
 * {
@@ -63,25 +63,7 @@ body {
    ============================================================ */
 
 .side-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: var(--nav-w);
-    height: 100vh;
-    z-index: 60;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 22px 0 26px;
-    color: var(--cream-soft);
-    background: transparent;
-    border-right: 1px solid rgba(201, 169, 110, 0.28);
-    transition:
-        background-color 600ms ease,
-        color 600ms ease,
-        border-color 600ms ease,
-        box-shadow 600ms ease,
-        backdrop-filter 600ms ease;
+    display: none !important;
 }
 
 .side-nav.scrolled {

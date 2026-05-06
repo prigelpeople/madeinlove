@@ -1195,7 +1195,6 @@ function App() {
 
     return (
         <div className="App" data-testid="app-root">
-            <Navbar scrolled={scrolled} scrollTo={scrollTo} />
             <GreetingBanner name={guest} hidden={pastHero} />
             <Hero onOpen={handleOpen} />
             <main className="main-content" data-testid="main-content">
