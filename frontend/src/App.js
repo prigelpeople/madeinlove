@@ -480,21 +480,20 @@ const PrambananMoment = () => {
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        const tick = () => {
-            const node = containerRef.current;
-            if (!node) return;
+        const node = containerRef.current;
+        if (!node) return;
+
+        const onScroll = () => {
             const rect = node.getBoundingClientRect();
             const total = rect.height - window.innerHeight;
-            if (total <= 0) return;
             const scrolled = -rect.top;
             const p = Math.max(0, Math.min(1, scrolled / total));
             setProgress(p);
         };
 
-        const onScroll = () => requestAnimationFrame(tick);
         window.addEventListener("scroll", onScroll, { passive: true });
         window.addEventListener("resize", onScroll);
-        tick();
+        onScroll();
 
         return () => {
             window.removeEventListener("scroll", onScroll);
@@ -516,9 +515,8 @@ const PrambananMoment = () => {
             data-testid="section-prambanan"
         >
             <div className="prambanan-sticky">
-                {/* full-bleed photo slideshow */}
                 <div
-                    className="prambanan-bg"
+                    className="prambanan-bg anim-parallax"
                     aria-hidden="true"
                     style={{
                         backgroundImage: `url(${process.env.PUBLIC_URL || ""}${slide.bg})`,
@@ -528,11 +526,11 @@ const PrambananMoment = () => {
                 <div className="prambanan-vignette" aria-hidden="true" />
 
                 <div className="prambanan-grid">
-                    <div className="prambanan-text" key={currentSlide} style={{ animation: "fadeIn 0.6s ease" }}>
-                        <p className="prambanan-eyebrow">{slide.eyebrow}</p>
-                        <h2 className="prambanan-headline">{slide.headline}</h2>
-                        <p className="prambanan-sub">{slide.sub}</p>
-                        <p className="prambanan-body">{slide.body}</p>
+                    <div className="prambanan-text" key={currentSlide}>
+                        <p className="prambanan-eyebrow anim-label">{slide.eyebrow}</p>
+                        <h2 className="prambanan-headline anim-lines">{slide.headline}</h2>
+                        <p className="prambanan-sub anim-up">{slide.sub}</p>
+                        <p className="prambanan-body anim-up" data-delay="0.15">{slide.body}</p>
                     </div>
                 </div>
             </div>
@@ -545,20 +543,21 @@ const PrambananMoment = () => {
    =========================================================== */
 const Bismillah = () => {
     const ref = useRef(null);
-    const inView = useInView(ref);
     return (
         <section
             ref={ref}
             id="bismillah"
-            className={`section warm-white bismillah-section fade-up ${inView ? "in-view" : ""}`}
+            className="section warm-white bismillah-section"
             data-testid="section-bismillah"
         >
             <div className="section-inner">
-                <Ornament />
-                <p className="bismillah-arabic" lang="ar" dir="rtl">
+                <div className="anim-scale">
+                    <Ornament />
+                </div>
+                <p className="bismillah-arabic anim-lines" lang="ar" dir="rtl">
                     بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
                 </p>
-                <p className="bismillah-translation">
+                <p className="bismillah-translation anim-up">
                     Dengan menyebut nama Allah Yang Maha Pengasih lagi Maha
                     Penyayang.
                 </p>
@@ -572,7 +571,6 @@ const Bismillah = () => {
    =========================================================== */
 const Couple = () => {
     const ref = useRef(null);
-    const inView = useInView(ref);
     const [cursorPos, setCursorPos] = useState({ x: -300, y: -300 });
     const [isHovering, setIsHovering] = useState(false);
     const animRef = useRef(null);
@@ -623,11 +621,10 @@ const Couple = () => {
         <section
             ref={ref}
             id="mempelai"
-            className={`section cream couple-section fade-up ${inView ? "in-view" : ""}`}
+            className="section cream couple-section"
             data-testid="section-couple"
             style={{ position: "relative", cursor: isHovering ? "none" : "auto" }}
         >
-            {/* Cursor follower sticker */}
             <img
                 src={`${process.env.PUBLIC_URL || ""}/couple-sticker.png`}
                 alt=""
@@ -648,11 +645,11 @@ const Couple = () => {
             />
 
             <div className="section-inner">
-                <p className="section-eyebrow">Sang Mempelai</p>
-                <h2 className="section-title">
+                <p className="section-eyebrow anim-label">Sang Mempelai</p>
+                <h2 className="section-title anim-lines">
                     Dengan rahmat &amp; ridho-Nya
                 </h2>
-                <p className="section-sub">
+                <p className="section-sub anim-up">
                     Kami bermaksud menyelenggarakan pernikahan putra dan putri
                     kami sebagai bukti syukur atas anugerah cinta yang Tuhan
                     titipkan.
@@ -660,11 +657,11 @@ const Couple = () => {
 
                 <div className="couple-grid">
                     <article className="couple-card" data-testid="card-groom">
-                        <p className="couple-role">The Groom</p>
-                        <span className="card-rule" />
-                        <h3 className="couple-name">Rachmatulla</h3>
-                        <span className="card-rule bottom" />
-                        <p className="couple-parents">
+                        <p className="couple-role anim-label">The Groom</p>
+                        <span className="card-rule anim-line-draw" />
+                        <h3 className="couple-name anim-lines">Rachmatulla</h3>
+                        <span className="card-rule bottom anim-line-draw" />
+                        <p className="couple-parents anim-up" data-delay="0.15">
                             Putra dari Bpk.{" "}
                             <span className="placeholder-tag">
                                 [Nama Ayah]
@@ -677,19 +674,20 @@ const Couple = () => {
                     </article>
 
                     <span
-                        className="couple-amp"
+                        className="couple-amp anim-scale"
                         aria-hidden="true"
+                        data-delay="0.3"
                         data-testid="couple-ampersand"
                     >
                         &amp;
                     </span>
 
                     <article className="couple-card" data-testid="card-bride">
-                        <p className="couple-role">The Bride</p>
-                        <span className="card-rule" />
-                        <h3 className="couple-name">Devy Puspita</h3>
-                        <span className="card-rule bottom" />
-                        <p className="couple-parents">
+                        <p className="couple-role anim-label">The Bride</p>
+                        <span className="card-rule anim-line-draw" />
+                        <h3 className="couple-name anim-lines">Devy Puspita</h3>
+                        <span className="card-rule bottom anim-line-draw" />
+                        <p className="couple-parents anim-up" data-delay="0.15">
                             Putri dari Bpk.{" "}
                             <span className="placeholder-tag">
                                 [Nama Ayah]
@@ -759,18 +757,18 @@ const Events = () => {
         <section
             ref={ref}
             id="acara"
-            className={`section warm-white events-section fade-up ${inView ? "in-view" : ""}`}
+            className="section warm-white events-section"
             data-testid="section-events"
         >
             <div className="section-inner">
-                <p className="section-eyebrow">Save The Date</p>
-                <h2 className="section-title">Rangkaian Acara</h2>
-                <p className="section-sub">
+                <p className="section-eyebrow anim-label">Save The Date</p>
+                <h2 className="section-title anim-lines">Rangkaian Acara</h2>
+                <p className="section-sub anim-up">
                     Sebuah kehormatan bagi kami untuk berbagi kebahagiaan
                     bersama anda dalam dua hari yang penuh berkah.
                 </p>
 
-                <div className="events-grid">
+                <div className="events-grid anim-stagger">
                     <EventCard
                         label="Resepsi Pernikahan"
                         day="Minggu"
@@ -792,7 +790,7 @@ const Events = () => {
                 </div>
 
                 <h3
-                    className="event-title"
+                    className="event-title anim-lines"
                     style={{
                         marginTop: 60,
                         fontSize: "1.4rem",
@@ -811,47 +809,46 @@ const Events = () => {
    =========================================================== */
 const Countdown = () => {
     const ref = useRef(null);
-    const inView = useInView(ref);
     const { days, hours, minutes, seconds } = useCountdown(RESEPSI_DATE);
     const pad = (n) => String(n).padStart(2, "0");
     return (
         <section
             ref={ref}
             id="hitung"
-            className={`section dark-warm countdown-section fade-up ${inView ? "in-view" : ""}`}
+            className="section dark-warm countdown-section"
             data-testid="section-countdown"
         >
             <div className="section-inner">
-                <p className="section-eyebrow">Counting Down</p>
-                <h2 className="countdown-headline">
+                <p className="section-eyebrow anim-label">Counting Down</p>
+                <h2 className="countdown-headline anim-lines">
                     Menghitung hari menuju hari bahagia
                 </h2>
-                <p className="countdown-sub">24 Mei 2026 · Resepsi Pernikahan</p>
+                <p className="countdown-sub anim-up">24 Mei 2026 · Resepsi Pernikahan</p>
 
-                <div className="countdown-grid" data-testid="countdown-grid">
+                <div className="countdown-grid anim-stagger" data-testid="countdown-grid">
                     <div className="countdown-cell">
-                        <div className="countdown-num" data-testid="countdown-days">
+                        <div className="countdown-num anim-counter" data-target={days} data-testid="countdown-days">
                             {pad(days)}
                         </div>
-                        <div className="countdown-label">Hari</div>
+                        <div className="countdown-label anim-label">Hari</div>
                     </div>
                     <div className="countdown-cell">
-                        <div className="countdown-num" data-testid="countdown-hours">
+                        <div className="countdown-num anim-counter" data-target={hours} data-testid="countdown-hours">
                             {pad(hours)}
                         </div>
-                        <div className="countdown-label">Jam</div>
+                        <div className="countdown-label anim-label">Jam</div>
                     </div>
                     <div className="countdown-cell">
-                        <div className="countdown-num" data-testid="countdown-minutes">
+                        <div className="countdown-num anim-counter" data-target={minutes} data-testid="countdown-minutes">
                             {pad(minutes)}
                         </div>
-                        <div className="countdown-label">Menit</div>
+                        <div className="countdown-label anim-label">Menit</div>
                     </div>
                     <div className="countdown-cell">
-                        <div className="countdown-num" data-testid="countdown-seconds">
+                        <div className="countdown-num anim-counter" data-target={seconds} data-testid="countdown-seconds">
                             {pad(seconds)}
                         </div>
-                        <div className="countdown-label">Detik</div>
+                        <div className="countdown-label anim-label">Detik</div>
                     </div>
                 </div>
             </div>
@@ -864,25 +861,24 @@ const Countdown = () => {
    =========================================================== */
 const Quote = () => {
     const ref = useRef(null);
-    const inView = useInView(ref);
     return (
         <section
             ref={ref}
             id="quote"
-            className={`section cream quote-section fade-up ${inView ? "in-view" : ""}`}
+            className="section cream quote-section"
             data-testid="section-quote"
         >
             <div className="quote-block">
-                <p className="quote-mark" aria-hidden="true">
+                <p className="quote-mark anim-scale" aria-hidden="true">
                     &ldquo;
                 </p>
-                <p className="quote-text">
+                <p className="quote-text anim-lines">
                     Dan di antara tanda-tanda kekuasaan-Nya ialah Dia
                     menciptakan untukmu pasangan hidup dari jenismu sendiri,
                     supaya kamu cenderung dan merasa tenteram kepadanya.
                 </p>
-                <p className="quote-source">QS. Ar-Rum : 21</p>
-                <hr className="quote-rule" />
+                <p className="quote-source anim-up">QS. Ar-Rum : 21</p>
+                <hr className="quote-rule anim-line-draw" />
             </div>
         </section>
     );
@@ -893,7 +889,6 @@ const Quote = () => {
    =========================================================== */
 const RSVP = ({ guestName }) => {
     const ref = useRef(null);
-    const inView = useInView(ref);
     const [form, setForm] = useState({
         name: guestName || "",
         attendance: "ya",
@@ -920,22 +915,22 @@ const RSVP = ({ guestName }) => {
         <section
             ref={ref}
             id="rsvp"
-            className={`section cream rsvp-section fade-up ${inView ? "in-view" : ""}`}
+            className="section cream rsvp-section"
             data-testid="section-rsvp"
         >
             <div className="section-inner">
-                <p className="section-eyebrow">RSVP &amp; Doa</p>
-                <h2 className="section-title">
+                <p className="section-eyebrow anim-label">RSVP &amp; Doa</p>
+                <h2 className="section-title anim-lines">
                     Konfirmasi kehadiran &amp; ucapan
                 </h2>
-                <p className="section-sub">
+                <p className="section-sub anim-up">
                     Doa dan kehadiran anda menjadi hadiah paling berharga
                     bagi kami berdua.
                 </p>
 
                 {submitted ? (
                     <div
-                        className="form-success"
+                        className="form-success anim-up"
                         data-testid="rsvp-success"
                     >
                         Terima kasih,
@@ -946,7 +941,7 @@ const RSVP = ({ guestName }) => {
                     </div>
                 ) : (
                     <form
-                        className="rsvp-form"
+                        className="rsvp-form anim-stagger"
                         onSubmit={handleSubmit}
                         data-testid="rsvp-form"
                     >
@@ -1068,11 +1063,13 @@ const RSVP = ({ guestName }) => {
    =========================================================== */
 const Footer = () => (
     <footer className="footer" data-testid="footer">
-        <Ornament className="ornament-top" />
-        <h3 className="footer-script">Rachmatulla &amp; Devy Puspita</h3>
-        <p className="footer-meta">24 Mei 2026 · Resepsi Pernikahan</p>
-        <div className="footer-rule" />
-        <p className="footer-tag">
+        <div className="anim-scale">
+            <Ornament className="ornament-top" />
+        </div>
+        <h3 className="footer-script anim-lines">Rachmatulla &amp; Devy Puspita</h3>
+        <p className="footer-meta anim-up">24 Mei 2026 · Resepsi Pernikahan</p>
+        <div className="footer-rule anim-line-draw" />
+        <p className="footer-tag anim-label">
             Made with love
             <Heart
                 className="footer-mark"
@@ -1179,6 +1176,184 @@ function App() {
         };
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
+
+        // ── GSAP ANIMATION SYSTEM ───────────────────────────
+        if (window.gsap && window.ScrollTrigger) {
+            const gsap = window.gsap;
+            const ScrollTrigger = window.ScrollTrigger;
+            gsap.registerPlugin(ScrollTrigger);
+
+            const EASE_OUT = "power3.out";
+            const EASE_EXPO = "expo.out";
+            const DURATION = 0.85;
+            const STAGGER = 0.12;
+            const TRIGGER_START = "top 88%";
+
+            function splitLines(el) {
+                const text = el.innerText;
+                const words = text.split(" ");
+                el.innerHTML = "";
+                const tempSpans = words.map((w) => {
+                    const s = document.createElement("span");
+                    s.style.cssText = "display:inline; white-space:pre;";
+                    s.textContent = w + " ";
+                    el.appendChild(s);
+                    return s;
+                });
+                const lines = [];
+                let currentLine = [];
+                let lastTop = null;
+                tempSpans.forEach((s) => {
+                    const top = s.getBoundingClientRect().top;
+                    if (lastTop !== null && Math.abs(top - lastTop) > 4) {
+                        lines.push(currentLine);
+                        currentLine = [];
+                    }
+                    currentLine.push(s.textContent.trim());
+                    lastTop = top;
+                });
+                if (currentLine.length) lines.push(currentLine);
+                el.innerHTML = "";
+                lines.forEach((lineWords) => {
+                    const mask = document.createElement("div");
+                    mask.className = "line-mask";
+                    mask.style.cssText = "overflow:hidden; display:block;";
+                    const inner = document.createElement("div");
+                    inner.className = "line-inner";
+                    inner.style.cssText = "display:block;";
+                    inner.textContent = lineWords.join(" ");
+                    mask.appendChild(inner);
+                    el.appendChild(mask);
+                });
+                return el.querySelectorAll(".line-inner");
+            }
+
+            const init = () => {
+                // Text Line Reveal
+                document.querySelectorAll(".anim-lines").forEach((el) => {
+                    const lines = splitLines(el);
+                    gsap.from(lines, {
+                        scrollTrigger: {
+                            trigger: el,
+                            start: TRIGGER_START,
+                            toggleActions: "play none none none",
+                        },
+                        y: "105%",
+                        opacity: 0,
+                        duration: DURATION,
+                        ease: EASE_EXPO,
+                        stagger: STAGGER,
+                    });
+                });
+
+                // Fade Up
+                document.querySelectorAll(".anim-up").forEach((el) => {
+                    const delay = parseFloat(el.dataset.delay || 0);
+                    gsap.from(el, {
+                        scrollTrigger: {
+                            trigger: el,
+                            start: TRIGGER_START,
+                            toggleActions: "play none none none",
+                        },
+                        y: 28,
+                        opacity: 0,
+                        duration: DURATION,
+                        delay: delay,
+                        ease: EASE_OUT,
+                    });
+                });
+
+                // Stagger Group
+                document.querySelectorAll(".anim-stagger").forEach((parent) => {
+                    gsap.from(parent.children, {
+                        scrollTrigger: {
+                            trigger: parent,
+                            start: TRIGGER_START,
+                            toggleActions: "play none none none",
+                        },
+                        y: 36,
+                        opacity: 0,
+                        duration: DURATION,
+                        ease: EASE_OUT,
+                        stagger: STAGGER,
+                    });
+                });
+
+                // Scale In
+                document.querySelectorAll(".anim-scale").forEach((el) => {
+                    gsap.from(el, {
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 92%",
+                            toggleActions: "play none none none",
+                        },
+                        scale: 0.94,
+                        opacity: 0,
+                        duration: 1.1,
+                        ease: EASE_OUT,
+                    });
+                });
+
+                // Line Draw
+                document.querySelectorAll(".anim-line-draw").forEach((el) => {
+                    gsap.from(el, {
+                        scrollTrigger: {
+                            trigger: el,
+                            start: TRIGGER_START,
+                            toggleActions: "play none none none",
+                        },
+                        scaleX: 0,
+                        opacity: 0,
+                        duration: 1.0,
+                        ease: EASE_OUT,
+                        transformOrigin: "left center",
+                    });
+                });
+
+                // Labels
+                document.querySelectorAll(".anim-label").forEach((el) => {
+                    gsap.from(el, {
+                        scrollTrigger: {
+                            trigger: el,
+                            start: TRIGGER_START,
+                            toggleActions: "play none none none",
+                        },
+                        opacity: 0,
+                        letterSpacing: "0.08em",
+                        duration: 1.0,
+                        ease: EASE_OUT,
+                    });
+                });
+
+                // Parallax
+                document.querySelectorAll(".anim-parallax").forEach((el) => {
+                    gsap.to(el, {
+                        scrollTrigger: {
+                            trigger: el.closest("section") || el.parentElement,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 1.5,
+                        },
+                        y: "-12%",
+                        ease: "none",
+                    });
+                });
+
+                ScrollTrigger.refresh();
+            };
+
+            // Use a slight timeout to ensure components are fully rendered
+            const timeoutId = setTimeout(() => {
+                if (document.fonts) {
+                    document.fonts.ready.then(init);
+                } else {
+                    init();
+                }
+            }, 100);
+
+            return () => clearTimeout(timeoutId);
+        }
+
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
 

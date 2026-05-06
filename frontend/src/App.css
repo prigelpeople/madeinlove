@@ -149,7 +149,7 @@ body {
 
 @media (max-width: 768px) {
     :root {
-        --nav-w: 40px;
+        --nav-w: 0px;
     }
     .side-nav {
         padding: 16px 0 22px;
@@ -1504,6 +1504,29 @@ body {
 /* ============================================================
    REDUCED MOTION
    ============================================================ */
+
+  /* ── ANIMATION INITIAL STATES ─────────────────────────── */
+.anim-lines { overflow: hidden; }
+.anim-lines .line-inner,
+.anim-up,
+.anim-scale,
+.anim-stagger > *,
+.anim-line-draw,
+.anim-label {
+    will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .anim-lines .line-inner,
+    .anim-up,
+    .anim-scale,
+    .anim-stagger > *,
+    .anim-line-draw,
+    .anim-label {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
 
 @media (prefers-reduced-motion: reduce) {
     *,
