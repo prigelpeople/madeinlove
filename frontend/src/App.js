@@ -142,102 +142,82 @@ const Navbar = ({ scrolled, scrollTo }) => (
 );
 
 /* ===========================================================
-   Hero (scroll-controlled video)
+   Hero (canvas-based sequence)
    =========================================================== */
 const Hero = ({ onOpen }) => {
     const heroRef = useRef(null);
-    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
     const [progress, setProgress] = useState(0);
     const [stage, setStage] = useState(0);
-    const fallbackRef = useRef(false);
-    const rafRef = useRef(null);
-    const targetTimeRef = useRef(0);
+
+    const frameCount = 100;
+    const currentFrame = (index) =>
+        `${process.env.PUBLIC_URL || ""}/frames/frame_${index.toString().padStart(3, "0")}.jpg`;
 
     useEffect(() => {
-        const reduceMotion = window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-        ).matches;
-        fallbackRef.current = reduceMotion;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const context = canvas.getContext("2d");
 
-        const v = videoRef.current;
-        if (!v) return;
+        // Set high-res canvas size
+        canvas.width = 1920;
+        canvas.height = 1080;
 
-        if (fallbackRef.current) {
-            v.muted = true;
-            v.loop = true;
-            v.playsInline = true;
-            v.setAttribute("playsinline", "");
-            const tryPlay = () => v.play().catch(() => { });
-            if (v.readyState >= 2) tryPlay();
-            else v.addEventListener("loadeddata", tryPlay, { once: true });
-        } else {
-            v.pause();
-            v.currentTime = 0;
+        const imgArray = [];
+        for (let i = 1; i <= frameCount; i++) {
+            const img = new Image();
+            img.src = currentFrame(i);
+            imgArray.push(img);
         }
 
-        const tick = () => {
-            const node = heroRef.current;
-            const vid = videoRef.current;
-            if (!node || !vid) {
-                rafRef.current = null;
-                return;
+        const render = (index) => {
+            const img = imgArray[Math.min(frameCount - 1, Math.max(0, Math.floor(index)))];
+            // Check both complete and naturalWidth to ensure image isn't broken/404
+            if (img && img.complete && img.naturalWidth !== 0) {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, 0, 0, canvas.width, canvas.height);
             }
-            const rect = node.getBoundingClientRect();
-            const total = rect.height - window.innerHeight;
-            const scrolled = -rect.top;
-            const p = Math.max(0, Math.min(1, scrolled / total));
-            setProgress(p);
-            if (p < 0.25) setStage(0);
-            else if (p < 0.55) setStage(1);
-            else if (p < 0.8) setStage(2);
-            else setStage(3);
+        };
 
-            if (!fallbackRef.current && vid.duration && !isNaN(vid.duration)) {
-                const target = Math.max(
-                    0,
-                    Math.min(vid.duration - 0.05, p * vid.duration)
-                );
-                targetTimeRef.current = target;
-                if (Math.abs(vid.currentTime - target) > 0.04) {
-                    try {
-                        vid.currentTime = target;
-                    } catch (e) {
-                        /* noop */
+        // GSAP ScrollTrigger sequence
+        const sequence = { frame: 0 };
+        
+        // Ensure GSAP and ScrollTrigger are loaded (from CDN in index.html)
+        if (window.gsap && window.ScrollTrigger) {
+            window.gsap.registerPlugin(window.ScrollTrigger);
+            
+            const tl = window.gsap.timeline({
+                scrollTrigger: {
+                    trigger: heroRef.current,
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1.5,
+                    onUpdate: (self) => {
+                        const p = self.progress;
+                        setProgress(p);
+                        if (p < 0.25) setStage(0);
+                        else if (p < 0.55) setStage(1);
+                        else if (p < 0.8) setStage(2);
+                        else setStage(3);
                     }
                 }
-            }
-            rafRef.current = null;
-        };
+            });
 
-        const onScroll = () => {
-            if (rafRef.current) return;
-            rafRef.current = requestAnimationFrame(tick);
-        };
+            tl.to(sequence, {
+                frame: frameCount - 1,
+                snap: "frame",
+                ease: "none",
+                onUpdate: () => render(sequence.frame)
+            });
 
-        const onResize = () => {
-            const wasFallback = fallbackRef.current;
-            const reduce = window.matchMedia(
-                "(prefers-reduced-motion: reduce)"
-            ).matches;
-            fallbackRef.current = reduce;
-            if (!wasFallback && fallbackRef.current) {
-                v.loop = true;
-                v.play().catch(() => { });
-            } else if (wasFallback && !fallbackRef.current) {
-                v.loop = false;
-                v.pause();
-            }
-            tick();
-        };
-
-        tick();
-        window.addEventListener("scroll", onScroll, { passive: true });
-        window.addEventListener("resize", onResize);
+            // Initial render
+            imgArray[0].onload = () => render(0);
+        }
 
         return () => {
-            window.removeEventListener("scroll", onScroll);
-            window.removeEventListener("resize", onResize);
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            if (window.ScrollTrigger) {
+                window.ScrollTrigger.getAll().forEach(t => t.kill());
+            }
         };
     }, []);
 
@@ -249,15 +229,15 @@ const Hero = ({ onOpen }) => {
             data-testid="hero-scroll-container"
         >
             <div className="hero-sticky">
-                <video
-                    ref={videoRef}
-                    className="hero-video"
-                    src="/hero-video.mp4"
-                    muted
-                    playsInline
-                    preload="auto"
-                    poster=""
-                    data-testid="hero-video"
+                <canvas
+                    ref={canvasRef}
+                    className="hero-canvas"
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block"
+                    }}
                 />
 
                 <div className="petals" aria-hidden="true">

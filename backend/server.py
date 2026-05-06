@@ -66,6 +66,29 @@ async def get_status_checks():
     
     return status_checks
 
+@api_router.post("/save-frame")
+async def save_frame(payload: dict):
+    frame_id = payload.get('id')
+    image_data = payload.get('image')
+    if not frame_id or not image_data:
+        return {"error": "Missing id or image"}
+    
+    import base64
+    try:
+        header, encoded = image_data.split(",", 1)
+        data = base64.b64decode(encoded)
+        
+        # Save to frontend/public/frames
+        frames_dir = Path(__file__).parent.parent / "frontend" / "public" / "frames"
+        frames_dir.mkdir(parents=True, exist_ok=True)
+        
+        file_path = frames_dir / f"frame_{frame_id}.jpg"
+        with open(file_path, "wb") as f:
+            f.write(data)
+        return {"status": "ok", "path": str(file_path)}
+    except Exception as e:
+        return {"error": str(e)}
+
 # Include the router in the main app
 app.include_router(api_router)
 
