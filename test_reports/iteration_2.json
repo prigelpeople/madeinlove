@@ -1,0 +1,43 @@
+{
+  "summary": "Frontend-only validation of iteration-2 wedding invitation refinements (vertical side navbar, hero with no dark overlay, new Prambanan Moment section). All 19 acceptance checks pass on desktop (1920x1080) and mobile (390x844). No console errors. Music toggle visual fix from iteration-1 confirmed.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_2.json"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "App.js is ~1280 lines — would benefit from splitting Hero, Monogram, PrambananMoment, RSVP into separate component files (>700 line guideline).",
+    "RSVP form is console.log only as expected per spec (mocked); when wiring real backend, validate guests min/max server-side too.",
+    "Greeting banner inline opacity transition reports a fractional computed value during scroll animations (~0.37 at scrollY=0 right after fast programmatic scroll). Visual behavior (hide past 1.4*vh) works correctly; consider `aria-hidden` toggle in addition to opacity."
+  ],
+  "verification_evidence": {
+    "1_side_nav_dims": { "class": "side-nav", "width_px": 48, "height_px": 1080, "left": 0 },
+    "2_vertical_links": "Acara/Hitung Hari/RSVP all writing-mode: vertical-rl. Monogram text='R&D'.",
+    "3_navbar_scroll_state": { "initial_scrolled_class": false, "after_scrollY_200": true },
+    "4_link_scroll_acara": "After click, #acara top=60.3 (matches 60px offset)",
+    "5_monogram_scroll_top": "scrollY transitioning to 0 after click (smooth scroll active)",
+    "6_no_overlay_no_vignette": "document.querySelector('.hero-overlay')=null AND document.querySelector('.hero-vignette')=null",
+    "7_hero_stage_crossfade": "Stage0@scroll0 active, Stage1@35% active, Stage2@65% active, Stage3@90% active",
+    "8_hero_progress_width": "89.91% at 90% scroll",
+    "9_greeting_banner": "Visible in hero, fades after scrollY > 1.4*vh; RSVP prefilled with 'Bapak Budi'",
+    "10_section_order": "mempelai(3810) -> momen(4542) -> acara(5568) — correct DOM ordering",
+    "11_prambanan_bg": "background-image: url('/prambanan.png'); /prambanan.png returns HTTP 200",
+    "12_text_content": "Headline 'Momen yang Telah Kami Nantikan', sub 'Rachmatulla & Devy Puspita · 24 Mei 2026', body 112 chars",
+    "13_monogram_svg": "Has .monogram-rotor + .monogram-medallion; text 'R&D' and ribbon '24·V·2026'",
+    "14_no_full_dark_overlay": "Only .prambanan-bg + .prambanan-vignette (edge gradient, transparent bg) + .prambanan-grid",
+    "15_music_toggle_offset": "left=66px (>48px navbar width), bottom=24px — does not overlap navbar",
+    "16_rsvp_submission": "Success element shows 'Terima kasih, Bapak Budi — pesan dan doa anda telah kami terima dengan hangat.'",
+    "17_countdown_ticks": "26 -> 24 over ~1.3s",
+    "18_mobile_390x844": "Navbar width 40px (var --nav-w), prambanan-grid stacks to single column (~306px)",
+    "19_no_console_errors": "0 errors captured"
+  },
+  "updated_files": [],
+  "success_rate": { "backend": "skipped", "frontend": "100% (19/19)" },
+  "seed_data_creation": "None — used ?to=Bapak+Budi query param for greeting/RSVP prefill",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iteration 2 fully validated. Headless Chromium cannot decode /hero-video.mp4 (h264) — this is environmental, not a defect; scroll-driven stage cross-fades drive the testable behavior. /wedding-music.mp3 is intentionally absent (mocked); music toggle still flips visual state. App.js is approaching 1300 lines — recommend modular split before next iteration."
+}

@@ -1,0 +1,262 @@
+============================================================
+WEDDING SCROLL VIDEO HERO — RACHMATULLA & DEVY PUSPITA
+Prompt Pendukung untuk Emergent.sh
+Dibuat dengan referensi: NT Scroll Video Hero Prompt.txt
+============================================================
+
+Use the website references already described below as the combined visual inspiration, and use the attached MP4 video file as the main hero media.
+
+────────────────────────────────────────
+PROJECT CONTEXT
+────────────────────────────────────────
+
+This is a digital wedding invitation landing page for:
+
+  Couple   : Rachmatulla & Devy Puspita
+  Event 1  : Resepsi Pernikahan — 24 Mei 2026
+  Event 2  : Ngunduh Mantu — 30 Mei 2026
+
+Target audience: wedding guests who will receive this link on WhatsApp or Instagram. The page should feel warm, romantic, and elegant — like holding a physical invitation made of soft linen paper with gold foil.
+
+────────────────────────────────────────
+VISUAL STYLE DIRECTION
+────────────────────────────────────────
+
+Draw inspiration from ALL THREE of these references simultaneously:
+
+1. https://lml.cc/en
+   → Borrow: full-viewport scroll-controlled storytelling, dark cinematic sections with restrained text, the way content reveals itself through scroll depth, editorial spacing and typographic confidence.
+
+2. https://mystifying-shaw-7.preview.emergentagent.com/
+   → Borrow: the exact scroll-video hero mechanic (video tied directly to scroll position), section rhythm, how text states transition as the video progresses, clean section transitions below the hero.
+
+3. https://www.farmminerals.com/promo
+   → Borrow: warm earthy color energy, generous full-bleed imagery, tactile natural texture feeling, how product/detail sections feel grounded and unhurried.
+
+FUSION GOAL: Take the cinematic scroll depth of lml.cc, the scroll-video mechanic of the skeleton rebuild, and the warm organic palette of farmminerals — and apply them to an elegant Indonesian wedding invitation.
+
+────────────────────────────────────────
+COLOR PALETTE — WARM WEDDING
+────────────────────────────────────────
+
+Primary palette (strictly follow these):
+  - Cream / Ivory         : #F5EFE6  (primary background)
+  - Warm Blush            : #E8C4A0  (accents, dividers, borders)
+  - Deep Terracotta Brown : #7D4F3A  (headlines, strong text)
+  - Dusty Rose            : #C9847A  (soft accent, CTA hover)
+  - Champagne Gold        : #C9A96E  (decorative lines, ornaments, date text)
+  - Warm White            : #FDFAF6  (text over dark sections)
+
+Over the hero video: use semi-transparent dark overlay (#1A0F0A at 40-55% opacity) so the warm text reads beautifully against the cinematic footage.
+
+Do NOT use: cold whites, cool grays, purple, neon, or blue tones anywhere.
+
+────────────────────────────────────────
+TYPOGRAPHY — SERIF ELEGANCE
+────────────────────────────────────────
+
+Load these Google Fonts (both are free):
+  - Display / Headlines  : "Cormorant Garamond" — weight 300, 400, 600 italic
+  - Body / Subheadings   : "Jost" — weight 300, 400 (clean, airy, modern contrast)
+  - Decorative accents   : "Great Vibes" — for the couple's names in large romantic script
+
+Usage rules:
+  - Couple names → Great Vibes, large (clamp 3rem to 6rem), Champagne Gold
+  - Section titles → Cormorant Garamond italic, generous letter-spacing
+  - Date / detail lines → Jost 300, wide tracking (0.25em), uppercase
+  - Body paragraphs → Cormorant Garamond 400, comfortable line-height 1.8
+  - Navigation items → Jost 300, small caps style
+
+────────────────────────────────────────
+HERO TRANSFORMATION (SCROLL VIDEO)
+────────────────────────────────────────
+
+The attached MP4 must become the full-viewport hero.
+
+Scroll behavior:
+  - Pin the hero section while the user scrolls through a 300vh scroll container
+  - Map scroll progress 0% → 100% directly to video currentTime 0 → end
+  - Use requestAnimationFrame for smooth scrubbing
+  - Mobile fallback: autoplay muted loop with poster frame, styled identically
+
+Hero text states (change with scroll progress):
+  0% – 25%   → [ENTRY]
+                Line 1 (Great Vibes, gold): "Rachmatulla & Devy Puspita"
+                Line 2 (Jost uppercase): "KAMI MENGUNDANG KEHADIRAN ANDA"
+                CTA: "Gulir untuk melihat lebih" with animated down-arrow
+
+  25% – 55%  → [DATE REVEAL]
+                Line 1 (Cormorant Garamond italic): "Dua hati, satu janji"
+                Line 2 (Jost wide tracking): "24 MEI 2026  ·  RESEPSI PERNIKAHAN"
+                Line 3 (Jost light): "30 MEI 2026  ·  NGUNDUH MANTU"
+
+  55% – 80%  → [MOOD / EMOTION]
+                Single centered line (Cormorant Garamond, large italic):
+                "Momen terindah dalam hidup kami"
+                Thin gold ornamental divider line below
+
+  80% – 100% → [INVITATION CLOSE]
+                Line 1 (Great Vibes): "Dengan penuh cinta,"
+                Line 2 (Jost): "Rachmatulla & Devy Puspita"
+                CTA button: "Buka Undangan" → smooth scroll to main content
+
+All text transitions: fade + subtle translateY(12px) → translateY(0), duration 600ms ease.
+
+────────────────────────────────────────
+PAGE SECTIONS BELOW THE HERO
+────────────────────────────────────────
+
+After the hero, build these sections in order. Each should feel like a page in a physical invitation booklet. Use generous vertical padding (min 120px). Alternate between cream (#F5EFE6) and warm white (#FDFAF6) backgrounds.
+
+─── SECTION 1: BISMILLAH OPENING ───
+Full-width section, centered.
+Decorative Arabic-style ornament (SVG, gold line art) at top.
+Text: Arabic phrase "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ" in a suitable Arabic font (Google Fonts: "Amiri") — large, centered, gold.
+Below it in Cormorant Garamond italic: "Dengan menyebut nama Allah Yang Maha Pengasih lagi Maha Penyayang"
+Subtle fade-in on scroll.
+
+─── SECTION 2: COUPLE INTRODUCTION ───
+Two-column layout (or stacked on mobile).
+Left: Groom details
+Right: Bride details
+
+Groom:
+  Name: Rachmatulla
+  (add: "Putra dari Bpk. [nama ayah] & Ibu [nama ibu]" as placeholder)
+
+Bride:
+  Devy Puspita
+  (add: "Putri dari Bpk. [nama ayah] & Ibu [nama ibu]" as placeholder)
+
+Between them: large ampersand "&" in Great Vibes, Champagne Gold, oversized (8rem+), slightly overlapping both sides.
+Thin horizontal gold line above and below each name block.
+Scroll-triggered entrance: slide up from bottom, staggered.
+
+─── SECTION 3: EVENT DETAILS ───
+Two elegant card blocks, side by side (stacked mobile).
+
+Card 1 — RESEPSI PERNIKAHAN
+  📅 Sabtu, 24 Mei 2026
+  🕐 [Waktu: contoh 10.00 – 13.00 WIB]
+  📍 [Nama Gedung / Lokasi Placeholder]
+  [Alamat Placeholder]
+  Button: "Lihat Lokasi" (opens Google Maps in new tab — use placeholder maps.google.com link)
+
+Card 2 — NGUNDUH MANTU
+  📅 Sabtu, 30 Mei 2026
+  🕐 [Waktu Placeholder]
+  📍 [Nama Gedung / Lokasi Placeholder]
+  [Alamat Placeholder]
+  Button: "Lihat Lokasi"
+
+Card style: ivory background, thin gold border (1px), generous padding, Cormorant Garamond headings, no box-shadow (use border only for refinement).
+
+─── SECTION 4: COUNTDOWN TIMER ───
+Full-width, dark warm background (#2C1810).
+Centered headline (Cormorant Garamond, warm white italic): "Menghitung Hari Menuju Hari Bahagia"
+Live JavaScript countdown to 24 Mei 2026 showing: HARI · JAM · MENIT · DETIK
+Each unit: large number in Great Vibes or Cormorant, gold. Label in Jost 300 uppercase below.
+Separated by thin gold vertical lines.
+
+─── SECTION 5: LOVE STORY / QUOTE ───
+Centered, max-width 680px.
+Decorative quotation mark (oversized, gold, Cormorant) at top left.
+Quote (Cormorant Garamond italic, large): 
+"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya."
+Source: "QS. Ar-Rum: 21" in Jost 300, small, tracked.
+Gold thin divider below.
+
+─── SECTION 6: RSVP / UCAPAN ───
+Form section with warm background.
+Headline: "Konfirmasi Kehadiran & Ucapan"
+Fields:
+  - Nama lengkap (text input)
+  - Hadir? (radio: Ya / Tidak / Masih Belum Pasti)
+  - Jumlah tamu (number, 1–5)
+  - Pesan / Doa untuk pasangan (textarea)
+  - Submit button: "Kirim Ucapan"
+
+Style: inputs with bottom-border only (no full border box), gold focus state, cream background on fields. No harsh box shadows.
+Note: Wire up form to console.log for now (static placeholder). Add comment: "// TODO: connect to Firebase / Google Sheets"
+
+─── SECTION 7: FOOTER ───
+Minimal. Dark warm (#2C1810).
+Center: couple names in Great Vibes, gold, medium size.
+Below: "Rachmatulla & Devy Puspita · 24 Mei 2026"
+Thin gold top border.
+Small: "Made with love ✦"
+
+────────────────────────────────────────
+DECORATIVE & MOTION DETAILS
+────────────────────────────────────────
+
+- Add subtle SVG floral/botanical corner ornaments (line art, gold stroke, no fill) to section dividers and the RSVP section header.
+- Add a thin gold horizontal rule (1px, 40% opacity) between major sections.
+- Scroll-triggered section entrances: every section fades in + translates up 24px → 0 as it enters the viewport. Use IntersectionObserver.
+- Floating petal or particle effect (optional, subtle): 3-4 soft blush circles/ovals drifting slowly in the background of the hero — CSS keyframe animation, very low opacity (8-12%), never distracting.
+- Smooth scroll behavior: html { scroll-behavior: smooth; }
+- Navigation: fixed top bar, transparent over hero → transitions to ivory/cream with a soft shadow after scrolling 80px. Links: Jost 300, small caps.
+
+────────────────────────────────────────
+TECHNICAL REQUIREMENTS
+────────────────────────────────────────
+
+- Single HTML file output (index.html) — all CSS and JS inline or in <style>/<script> tags
+- No external framework dependencies (vanilla HTML/CSS/JS only, OR React if Emergent prefers)
+- Google Fonts loaded via <link> in <head>
+- Fully responsive: mobile-first, breakpoints at 768px and 1200px
+- Reduced-motion: @media (prefers-reduced-motion: reduce) → disable scroll-video scrubbing, show static poster frame; disable entrance animations
+- Video: muted, playsinline, preload="auto", no controls shown
+- All placeholder text clearly marked with [PLACEHOLDER] so the couple can find and replace easily
+- Performance: lazy-load sections below the fold using IntersectionObserver
+- No Lorem Ipsum — use contextually appropriate Indonesian wedding placeholder text
+
+────────────────────────────────────────
+BRAND & CONTENT RULES
+────────────────────────────────────────
+
+- Real couple names: Rachmatulla & Devy Puspita (use these, do not replace)
+- Real dates: 24 Mei 2026 (Resepsi), 30 Mei 2026 (Ngunduh Mantu)
+- All other details (venue, address, time, parent names) → [PLACEHOLDER]
+- Do NOT use generic wedding stock phrases in English — keep all copy in Indonesian
+- Tone: warm, reverent, joyful, not overly formal and not casual
+
+────────────────────────────────────────
+QUALITY CHECKLIST (check before accepting)
+────────────────────────────────────────
+
+☐ MP4 video is the full-viewport hero — not a card, side image, or thumbnail
+☐ Scroll controls the video timeline directly (scrubbing, not autoplay)
+☐ Text states change smoothly across 4 scroll stages
+☐ Warm color palette is used throughout — no cold/blue tones anywhere
+☐ Cormorant Garamond + Jost + Great Vibes are all loaded and rendering
+☐ All 7 sections below the hero are present
+☐ Countdown timer is functional and counting toward 24 Mei 2026
+☐ RSVP form is present and styled correctly
+☐ Couple names and dates are correct (not placeholder)
+☐ All venue/address/time fields are marked [PLACEHOLDER]
+☐ Page is responsive on mobile (375px viewport)
+☐ Reduced-motion fallback is implemented
+☐ No generic AI copy — all text is in Indonesian and wedding-appropriate
+
+────────────────────────────────────────
+CORRECTION PROMPTS (use if needed)
+────────────────────────────────────────
+
+If video is too small:
+"Buat video mengisi seluruh area hero/header. Jangan letakkan sebagai card atau preview kecil."
+
+If style is too cold/modern:
+"Gunakan palet warna lebih hangat: ivory, blush, terracotta, champagne gold. Hindari warna putih dingin, abu-abu, atau biru. Font harus serif elegan."
+
+If scroll video is not working:
+"Pastikan scroll position langsung mengontrol video currentTime. Gunakan requestAnimationFrame dan pinned scroll container (300vh)."
+
+If sections below hero are missing:
+"Tambahkan semua 7 section: Bismillah opening, couple introduction, event details (2 cards), countdown timer, love quote, RSVP form, dan footer."
+
+────────────────────────────────────────
+END OF PROMPT
+Created by NomadaToast workflow × wedding customization
+Couple: Rachmatulla & Devy Puspita · 24 & 30 Mei 2026
+============================================================

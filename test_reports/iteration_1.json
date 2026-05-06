@@ -1,0 +1,43 @@
+{
+  "summary": "Completed frontend-only E2E testing of the Rachmatulla & Devy Puspita wedding invitation. Validated page load, scroll-driven hero stage cross-fade (0→1→2→3), greeting banner from ?to=, Bismillah/Couple/Events/Countdown/Quote/RSVP sections, RSVP form submit + console.log, maps links, countdown tick, navbar scroll transitions, smooth-scroll CTAs, and mobile viewport. 16/17 requested features pass. One minor issue: music toggle does not visually toggle state when the audio file is missing (spec requires visual toggle regardless of audio failure).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "MusicToggle",
+        "issue": "When /wedding-music.mp3 is absent, audio.play() rejects; the .catch() handler calls setPlaying(false), so state never flips to true and the icon (Music2 <-> VolumeX) never swaps and className 'playing' never applies. Spec explicitly required: 'button must still toggle visually without crashing'. Fix: flip the state optimistically before play() (or in a finally/regardless block) so the icon toggles even when audio cannot play. E.g., setPlaying(p => !p) then call play(); on catch, keep the visual state rather than forcing it back.",
+        "selector": "[data-testid=\"music-toggle-btn\"]",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Couple & Events sections",
+        "issues": [
+          "Placeholder tags like [Nama Ayah], [Nama Ibu], [Nama Gedung / Lokasi], [Alamat Lengkap] and maps query ?q=[Lokasi+Resepsi] are still literal. These are intentional placeholders per spec, but maps CTA currently opens a Google Maps search for the literal string '[Lokasi+Resepsi]' which is unhelpful. Consider either hiding the maps CTA until real data is supplied or pointing to a neutral maps URL."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Fix MusicToggle so the icon/aria-label toggles visually even when the audio file is missing or play() rejects (spec-required behaviour).",
+    "(Optional) Replace literal placeholder text in Google Maps URLs so the Lihat Lokasi buttons don't search for '[Lokasi+Resepsi]' / '[Lokasi+Ngunduh+Mantu]' literally."
+  ],
+  "critical_code_review_comments": [
+    "Hero useEffect has empty deps [] but references window — OK for CSR; add SSR guard if ever moved to Next.js.",
+    "Hero fallback detection only runs on mount+resize; re-evaluating prefers-reduced-motion via matchMedia listener would be more robust but not critical.",
+    "MusicToggle error-handling: catch swallows the error silently — spec compliance bug noted above.",
+    "Events cards use hard-coded placeholder maps URL with brackets; will open bad Google Maps result.",
+    "No backend code in this iteration (RSVP is console.log only — matches user choice)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (not requested)", "frontend": "94% (16/17 spec items pass; 1 minor defect)"},
+  "test_credentials": "none required",
+  "seed_data_creation": "none",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Frontend is healthy. Key confirmations already gathered: (a) scroll-video mechanic works: hero-stage 0/1/2/3 activate at scrollY ~0 / 0.9*vh / 1.3*vh / 2.55*vh; hero-progress bar grows 0%->100%; video element shows error code 4 in headless (expected, ignore per spec); (b) ?to=Bapak+Budi renders greeting-banner and prefills rsvp-input-name; banner hides (opacity:0) after scrollY > 1.4*vh; (c) RSVP submit triggers console '[RSVP submission] {...}' and shows rsvp-success with guest name; (d) countdown seconds tick every second; countdown-days showed 19 on 2026-05-05; (e) navbar class becomes 'nav-bar scrolled' after 80px; nav-link-acara scrolls acara into view (top~60px); hero-scroll-cta scrolls by ~70vh; hero-open-cta smooth-scrolls to Bismillah; (f) mobile 390px viewport renders correctly. Only the music-toggle visual-toggle-on-audio-failure issue remains. If retesting, focus only on that after fix.",
+  "rca of the issue": "MusicToggle.toggle(): when playing===false, calls audioRef.current.play().then(()=>setPlaying(true)).catch(()=>setPlaying(false)). Because /wedding-music.mp3 is absent (placeholder), the Promise rejects and setPlaying(false) keeps state at false forever, so the className 'playing' never applies and the icon stays on Music2 (never becomes VolumeX). The spec explicitly demanded: 'the button must still toggle visually without crashing'. Reproduction: click [data-testid=music-toggle-btn]; aria-label remains 'Play music' and class remains 'music-toggle ' (no 'playing'). Mitigation: toggle state first (setPlaying(p=>!p)), then attempt play/pause; in catch, leave state alone (or track audio-failure separately so the icon reflects user intent even if audio can't play)."
+}

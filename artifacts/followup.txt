@@ -1,0 +1,144 @@
+============================================================
+FOLLOW-UP PROMPT — REFINEMENT & NEW SECTION
+Wedding: Rachmatulla & Devy Puspita
+Target: https://mystifying-shaw-7.preview.emergentagent.com/
+============================================================
+
+Lanjutkan dan perbaiki project ini. Jangan ubah section yang sudah bagus (couple intro, event cards, countdown, RSVP). Fokus pada 3 perubahan berikut:
+
+════════════════════════════════════════
+PERUBAHAN 1: NAVBAR — LAYOUT SAMPING
+════════════════════════════════════════
+
+Referensi: https://skeleton-rebuild.preview.emergentagent.com/
+
+Ubah navbar menjadi VERTICAL SIDE NAVBAR, bukan horizontal top bar:
+
+Layout:
+- Navbar menempel di sisi KIRI layar, full height, fixed position
+- Width: 48px dalam keadaan collapsed
+- Berisi: logo monogram "R&D" di atas (rotated 90deg, atau vertikal), lalu nav links vertikal di bawah
+- Nav links teks dirotasi 90 derajat atau ditulis vertikal ke atas: ACARA · HITUNG HARI · RSVP
+- Di mobile (< 768px): navbar tetap di kiri tapi collapse menjadi icon-only dengan hamburger
+
+Style navbar:
+- Background: transparan di atas hero (over video), berubah ke ivory (#F5EFE6) dengan soft shadow setelah hero
+- Teks: Jost 300, letter-spacing 0.2em, uppercase
+- Warna teks: warm white (#FDFAF6) saat over video, terracotta brown (#7D4F3A) setelah hero
+- Smooth transition warna saat scroll melewati hero
+- Thin gold vertical line (1px, #C9A96E) sebagai separator di sisi kanan navbar
+
+Dengan adanya side navbar, geser main content ke kanan sebesar 48px (padding-left: 48px pada body atau wrapper).
+
+════════════════════════════════════════
+PERUBAHAN 2: HERO SECTION — BRIGHT & CLEAN
+════════════════════════════════════════
+
+HAPUS SEMUA overlay gelap dari hero section.
+
+Spesifik:
+- Hapus: background overlay, dark tint, vintage filter, sepia, color-burn, multiply — semua layer pewarna yang menutup video
+- Hapus: CSS filter: sepia() brightness() saturate() atau apapun yang mengubah warna asli video
+- Video harus tampil dalam warna ASLI 100% — cerah, natural, apa adanya
+- Jika ada ::after atau ::before pseudo-element dengan background rgba gelap di atas video, hapus semua itu
+
+Teks di atas video:
+- Tetap ada teks overlay, tapi karena tidak ada layer gelap, gunakan text-shadow yang kuat:
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.8)
+- Atau tambahkan backdrop: pill/tag semi-transparent warm dark (#1A0F0A at 30% opacity) hanya di belakang teks, bukan full-screen
+- Warna teks: tetap warm white (#FDFAF6) dan champagne gold (#C9A96E) untuk nama
+- Couple names (Great Vibes font, gold) dengan text-shadow kuat agar tetap terbaca di atas video cerah
+
+Scroll behavior:
+- Pertahankan scroll-controlled video scrubbing yang sudah ada
+- Pertahankan 4 text states yang berganti seiring scroll
+
+════════════════════════════════════════
+PERUBAHAN 3: SECTION BARU — "FOTO COUPLE + ASSET MONOGRAM"
+Referensi visual: farmminerals.com/promo (layout foto 1)
+════════════════════════════════════════
+
+Tambahkan section baru SETELAH section couple intro (Rachmatulla & Devy) dan SEBELUM event cards.
+
+Layout mengikuti farmminerals section yang dimaksud:
+- Full viewport width, min-height 90vh
+- Background: FOTO COUPLE yang dilampirkan (foto 3 — pasangan di depan Prambanan) sebagai full-bleed background image
+  → object-fit: cover, object-position: center top
+  → Background image ini dimasukkan via CSS background-image (gunakan placeholder URL atau base64 jika tidak bisa di-inline)
+  → Karena tidak ada file gambar tersedia di chat ini, gunakan CSS gradient sebagai PLACEHOLDER dan beri komentar: /* REPLACE WITH: couple photo Prambanan */
+
+- Di atas background foto, tampilkan MONOGRAM ASSET sebagai elemen tengah yang melayang:
+  → Asset tengah adalah monogram "R&D" dengan dekorasi bunga 3D (seperti foto 4 yang dilampirkan — emblem dengan bunga-bunga)
+  → Implementasikan dengan Three.js ATAU sebagai animated SVG/CSS art yang mewah
+  → Jika pakai Three.js: buat scene dengan ambient + directional light, render monogram letter "R & D" dalam 3D dengan material glossy/iridescent, kelilingi dengan partikel bunga kecil yang berputar perlahan (rotation speed: 0.003 rad/frame)
+  → Jika pakai SVG/CSS: buat monogram frame berbentuk medallion/cartouche dengan border ganda gold (#C9A96E), inisial "R & D" dalam Great Vibes font di tengah, surrounded by SVG bunga-bunga dekoratif yang animated (gentle rotation 20s infinite linear)
+  → Canvas/SVG size: 400x400px di desktop, 280x280px di mobile
+  → Posisi: center horizontal, vertically centered atau slightly upper-center
+
+- Teks di sisi kiri (seperti farmminerals layout yang headline besar di kiri):
+  → Headline besar (Cormorant Garamond italic, 4-5rem, warm white dengan text-shadow):
+     "Momen yang Telah Kami Nantikan"
+  → Sub-line (Jost 300, tracked uppercase, champagne gold):
+     "RACHMATULLA & DEVY PUSPITA · 24 MEI 2026"
+  → 2-3 baris kecil di bawah (Jost 300, warm white, 0.9rem):
+     "Dengan penuh syukur dan kebahagiaan,"
+     "kami mengundang kehadiran Anda"
+     "untuk berbagi momen terindah ini bersama kami."
+
+- Layout grid: [teks kiri 45%] [monogram asset tengah-kanan 55%]
+  → Di mobile: stacked, monogram di atas, teks di bawah
+
+- Tidak ada dark overlay pada section ini — foto background tampil natural (sedikit brightness(1.05) boleh, tapi jangan gelap)
+- Tambahkan subtle vignette hanya di tepi (radial-gradient from transparent center to rgba(0,0,0,0.3) at edges) agar foto terasa sinematik tanpa gelap keseluruhan
+
+Three.js implementation note (jika digunakan):
+  - Import via CDN: https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js
+  - Render ke canvas element yang di-position: absolute di dalam section
+  - canvas pointer-events: none agar tidak menghalangi scroll
+  - Inisialisasi hanya ketika section masuk viewport (IntersectionObserver)
+  - requestAnimationFrame loop: rotate group 0.003 per frame
+  - Particle system: 60-80 small plane geometries (bunga/petal shape) dengan MeshBasicMaterial, warna campuran blush pink dan gold, berputar di orbit sekitar center
+
+════════════════════════════════════════
+PERTAHANKAN (JANGAN DIUBAH)
+════════════════════════════════════════
+
+- Section Bismillah opening ✓
+- Section couple introduction (Rachmatulla & Devy dengan ampersand gold) ✓
+- Section event cards (Resepsi 24 Mei + Ngunduh Mantu 30 Mei) ✓
+- Section countdown timer ✓
+- Section love quote (QS. Ar-Rum) ✓
+- Section RSVP form ✓
+- Footer ✓
+- Semua font: Great Vibes + Cormorant Garamond + Jost ✓
+- Warna palette: ivory, blush, terracotta, champagne gold ✓
+- Background musik player (jika sudah ada) ✓
+
+════════════════════════════════════════
+URUTAN SECTION FINAL SETELAH PERUBAHAN
+════════════════════════════════════════
+
+1. Hero (scroll-controlled video, BRIGHT/no dark overlay)
+   [side navbar fixed kiri]
+2. Bismillah opening
+3. Couple intro (Rachmatulla & Devy)
+4. *** SECTION BARU: Foto Prambanan + Monogram 3D ***
+5. Event cards (Resepsi + Ngunduh Mantu)
+6. Countdown timer
+7. Love quote
+8. RSVP form
+9. Footer
+
+════════════════════════════════════════
+OUTPUT YANG DIHARAPKAN
+════════════════════════════════════════
+
+- Summarize changes made
+- List files modified
+- Note any Three.js fallback decisions
+- Confirm hero overlay removed
+- Confirm side navbar implemented
+
+============================================================
+END OF FOLLOW-UP PROMPT
+============================================================

@@ -1,0 +1,15 @@
+Perbaiki posisi teks di hero section saja. Jangan ubah apapun selain posisi dan ukuran teks hero.
+
+Referensi posisi: teks hero harus berada di pojok KIRI BAWAH layar, menempel ke bawah-kiri viewport, bukan di tengah.
+
+Spesifik:
+- Container teks: position absolute, bottom: 10%, left: 5% (atau padding kiri setelah side navbar)
+- Teks TIDAK di-center, rata kiri (text-align: left)
+- Ukuran headline (nama pasangan / tagline utama): clamp(2.5rem, 5vw, 4.5rem) — seukuran headline besar tapi tidak terlalu raksasa, sesuai referensi
+- Sub-teks dan tanggal: font-size 0.85rem, Jost 300, tracked, di bawah headline
+- HAPUS semua text-shadow, drop-shadow, backdrop-filter, background pill/card di belakang teks — teks berdiri sendiri tanpa efek apapun
+- Teks tetap warm white (#FDFAF6) dan gold (#C9A96E) untuk nama — andalkan kontras warna saja, bukan shadow
+
+Semua text state yang berganti saat scroll tetap di posisi yang sama (kiri bawah), hanya kontennya yang fade in/out.
+
+Jangan ubah: video scrubbing, section lain, navbar, font, warna, atau apapun di luar posisi teks hero ini.
