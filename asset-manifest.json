@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/madeinlove/static/css/main.cfcbe8c9.css",
+    "main.js": "/madeinlove/static/js/main.84411aec.js",
+    "index.html": "/madeinlove/index.html",
+    "main.cfcbe8c9.css.map": "/madeinlove/static/css/main.cfcbe8c9.css.map",
+    "main.84411aec.js.map": "/madeinlove/static/js/main.84411aec.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cfcbe8c9.css",
+    "static/js/main.84411aec.js"
+  ]
+}
