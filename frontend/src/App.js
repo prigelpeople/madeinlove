@@ -142,6 +142,224 @@ const Navbar = ({ scrolled, scrollTo }) => (
 );
 
 /* ===========================================================
+   Marquee Text Section — horizontal scroll
+   =========================================================== */
+const MarqueeSection = () => {
+    const trackRef = useRef(null);
+
+    useEffect(() => {
+        const inner = trackRef.current;
+        if (!inner || !window.gsap) return;
+
+        const totalWidth = inner.scrollWidth / 3;
+
+        window.gsap.to(inner, {
+            scrollTrigger: {
+                trigger: "#marquee-section",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.5,
+            },
+            x: -totalWidth * 0.4,
+            ease: "none",
+        });
+    }, []);
+
+    return (
+        <section className="marquee-section" id="marquee-section">
+            <div className="marquee-rule top" />
+            <div className="marquee-track">
+                <div className="marquee-inner" ref={trackRef}>
+                    <span className="marquee-text">Dengan Cinta yang Tulus&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                    <span className="marquee-text">Rachmatulla &amp; Devy Puspita&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                    <span className="marquee-text">24 Mei 2026&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                    <span className="marquee-text">Dengan Cinta yang Tulus&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                    <span className="marquee-text">Rachmatulla &amp; Devy Puspita&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                    <span className="marquee-text">24 Mei 2026&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                    <span className="marquee-text">Dengan Cinta yang Tulus&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                    <span className="marquee-text">Rachmatulla &amp; Devy Puspita&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                </div>
+            </div>
+            <div className="marquee-rule bottom" />
+        </section>
+    );
+};
+
+/* ===========================================================
+   Product Pin Section — sticky asset + card swap
+   =========================================================== */
+const ProductPinSection = () => {
+    const sectionRef = useRef(null);
+    const cardL1Ref = useRef(null);
+    const cardL2Ref = useRef(null);
+    const cardR1Ref = useRef(null);
+    const cardR2Ref = useRef(null);
+    const assetRef = useRef(null);
+    const spacerRef = useRef(null);
+
+    useEffect(() => {
+        const section = sectionRef.current;
+        const spacer = spacerRef.current;
+        if (!section || !spacer || !window.gsap) return;
+
+        const gsap = window.gsap;
+        const ScrollTrigger = window.ScrollTrigger;
+
+        // Entrance
+        gsap.from(assetRef.current, {
+            scrollTrigger: {
+                trigger: section,
+                start: "top 80%",
+                toggleActions: "play none none none",
+            },
+            y: 60,
+            opacity: 0,
+            scale: 0.88,
+            duration: 1.2,
+            ease: "expo.out",
+        });
+
+        gsap.from([cardL1Ref.current, cardR1Ref.current], {
+            scrollTrigger: {
+                trigger: section,
+                start: "top 80%",
+                toggleActions: "play none none none",
+            },
+            x: (i) => (i === 0 ? -50 : 50),
+            opacity: 0,
+            duration: 1.0,
+            ease: "expo.out",
+            stagger: 0.15,
+        });
+
+        // Card Swap Logic
+        const showCards = (showL, showR, hideL, hideR) => {
+            [showL, showR].forEach((card) => {
+                if (card && card.classList.contains("hidden")) {
+                    card.classList.remove("hidden");
+                    gsap.fromTo(
+                        card,
+                        { opacity: 0, y: 16 },
+                        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+                    );
+                }
+            });
+            [hideL, hideR].forEach((card) => {
+                if (card && !card.classList.contains("hidden")) {
+                    gsap.to(card, {
+                        opacity: 0,
+                        y: -10,
+                        duration: 0.4,
+                        ease: "power2.in",
+                        onComplete: () => card.classList.add("hidden"),
+                    });
+                }
+            });
+        };
+
+        ScrollTrigger.create({
+            trigger: spacer,
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+                const p = self.progress;
+                if (p < 0.45) {
+                    showCards(cardL1Ref.current, cardR1Ref.current, cardL2Ref.current, cardR2Ref.current);
+                } else if (p > 0.55) {
+                    showCards(cardL2Ref.current, cardR2Ref.current, cardL1Ref.current, cardR1Ref.current);
+                }
+
+                const bgImg = section.querySelector(".product-bg-img");
+                if (bgImg) {
+                    gsap.set(bgImg, { y: p * -60 });
+                }
+            },
+        });
+    }, []);
+
+    return (
+        <>
+            <section className="product-pin-section" id="productPin" ref={sectionRef}>
+                <div className="product-bg">
+                    <img
+                        src={`${process.env.PUBLIC_URL || ""}/assets/couple-photo.jpg`}
+                        alt="Rachmatulla dan Devy Puspita"
+                        className="product-bg-img"
+                    />
+                    <div className="product-bg-overlay" />
+                </div>
+
+                <div className="product-pin-inner">
+                    {/* Left Cards */}
+                    <div className="product-card left" ref={cardL1Ref}>
+                        <div className="card-tag">RESEPSI PERNIKAHAN</div>
+                        <h3 className="card-headline">24 Mei 2026</h3>
+                        <div className="card-icon">✦</div>
+                        <p className="card-body">
+                            Sabtu, 24 Mei 2026<br />
+                            Jalan Salak, Gondang, Tanjung<br />
+                            Kertosono, Nganjuk<br />
+                            Pukul 10.00 WIB
+                        </p>
+                    </div>
+                    <div className="product-card left hidden" ref={cardL2Ref}>
+                        <div className="card-tag">NGUNDUH MANTU</div>
+                        <h3 className="card-headline">30 Mei 2026</h3>
+                        <div className="card-icon">✦</div>
+                        <p className="card-body">
+                            Sabtu, 30 Mei 2026<br />
+                            [Nama Gedung / Lokasi]<br />
+                            [Alamat Lengkap]<br />
+                            Pukul [00.00] WIB
+                        </p>
+                    </div>
+
+                    {/* Center */}
+                    <div className="product-center">
+                        <div className="product-float-wrap">
+                            <img
+                                src={`${process.env.PUBLIC_URL || ""}/assets/monogram-3d.png`}
+                                alt="Rachmatulla & Devy Puspita"
+                                className="product-3d-img"
+                                ref={assetRef}
+                            />
+                            <div className="product-glow" />
+                        </div>
+                        <div className="product-label-wrap">
+                            <p className="product-label-tag">THE WEDDING OF</p>
+                            <h2 className="product-label-name">Rachmatulla &amp; Devy Puspita</h2>
+                        </div>
+                    </div>
+
+                    {/* Right Cards */}
+                    <div className="product-card right" ref={cardR1Ref}>
+                        <div className="card-tag">MEMPELAI PRIA</div>
+                        <h3 className="card-headline">Rachmatulla</h3>
+                        <div className="card-icon">♡</div>
+                        <p className="card-body">
+                            Putra dari<br />
+                            Bpk. Moh Nahir Sidik<br />
+                            &amp; Ibu Tarmini
+                        </p>
+                    </div>
+                    <div className="product-card right hidden" ref={cardR2Ref}>
+                        <div className="card-tag">MEMPELAI WANITA</div>
+                        <h3 className="card-headline">Devy Puspita</h3>
+                        <div className="card-icon">♡</div>
+                        <p className="card-body">
+                            Putri dari<br />
+                            Bpk. Margono<br />
+                            &amp; Ibu Sudarmi
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <div id="productPinSpacer" ref={spacerRef} style={{ height: "250vh" }} />
+        </>
+    );
+};
+
+/* ===========================================================
    Hero (canvas-based sequence)
    =========================================================== */
 const Hero = ({ onOpen }) => {
@@ -181,11 +399,11 @@ const Hero = ({ onOpen }) => {
 
         // GSAP ScrollTrigger sequence
         const sequence = { frame: 0 };
-        
+
         // Ensure GSAP and ScrollTrigger are loaded (from CDN in index.html)
         if (window.gsap && window.ScrollTrigger) {
             window.gsap.registerPlugin(window.ScrollTrigger);
-            
+
             const tl = window.gsap.timeline({
                 scrollTrigger: {
                     trigger: heroRef.current,
@@ -430,17 +648,7 @@ const prambananSlides = [
                 Kertosono, Nganjuk
             </span>
         ),
-        body: (
-            <>
-                Satu langkah untuk selamanya,
-                <br />
-                dalam balutan cinta dan kasih sayang
-                <br />
-                yang tulus dari hati.
-            </>
-        )
 
-        ,
     },
     {
         bg: "/slide3.jpg",
@@ -463,15 +671,7 @@ const prambananSlides = [
                 Jatirejo, Nganjuk
             </span>
         ),
-        body: (
-            <>
-                Kami berjanji untuk saling mencintai,
-                <br />
-                mendukung, dan menua bersama
-                <br />
-                dalam setiap perjalanan hidup.
-            </>
-        ),
+
     },
 ];
 
@@ -1070,7 +1270,7 @@ const Footer = () => (
         <p className="footer-meta anim-up">24 Mei 2026 · Resepsi Pernikahan</p>
         <div className="footer-rule anim-line-draw" />
         <p className="footer-tag anim-label">
-            Made with love
+            Made with Claude, Antigravity, seedance by PrigelPeople
             <Heart
                 className="footer-mark"
                 size={12}
@@ -1372,9 +1572,18 @@ function App() {
         <div className="App" data-testid="app-root">
             <GreetingBanner name={guest} hidden={pastHero} />
             <Hero onOpen={handleOpen} />
+            <div className="section-fog-transition" aria-hidden="true">
+                <img
+                    src={`${process.env.PUBLIC_URL || ""}/assets/fog-transition.png`}
+                    alt=""
+                    className="fog-img"
+                />
+            </div>
             <main className="main-content" data-testid="main-content">
                 <Couple />
                 <PrambananMoment />
+                <MarqueeSection />
+                <ProductPinSection />
                 <Events />
                 <Countdown />
                 <Quote />
