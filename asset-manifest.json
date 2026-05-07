@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/madeinlove/static/css/main.6f614d60.css",
-    "main.js": "/madeinlove/static/js/main.42c80cd2.js",
+    "main.css": "/madeinlove/static/css/main.b9c74e8e.css",
+    "main.js": "/madeinlove/static/js/main.88064c03.js",
     "index.html": "/madeinlove/index.html",
-    "main.6f614d60.css.map": "/madeinlove/static/css/main.6f614d60.css.map",
-    "main.42c80cd2.js.map": "/madeinlove/static/js/main.42c80cd2.js.map"
+    "main.b9c74e8e.css.map": "/madeinlove/static/css/main.b9c74e8e.css.map",
+    "main.88064c03.js.map": "/madeinlove/static/js/main.88064c03.js.map"
   },
   "entrypoints": [
-    "static/css/main.6f614d60.css",
-    "static/js/main.42c80cd2.js"
+    "static/css/main.b9c74e8e.css",
+    "static/js/main.88064c03.js"
   ]
 }
